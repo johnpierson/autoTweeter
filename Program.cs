@@ -45,7 +45,7 @@ namespace autoTweeter
             }
 
             lastCommit = lastCommit.Replace("Create ", "");
-            lastCommit = lastCommit.Replace(".md ", "");
+            lastCommit = lastCommit.Replace(".md", "");
 
 
             var status = $"new post: https://www.sixtysecondrevit.com/{lastCommit}";

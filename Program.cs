@@ -21,9 +21,8 @@ namespace autoTweeter
         static void Main(string[] args)
         {
             string lastCommit = string.Empty;
-
             var githubToken = Configuration["access_token"];
-            var request = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/johnpierson/sixtysecondrevit/commits");
+            var request = (HttpWebRequest)WebRequest.Create(Configuration["repo_api"]);
             request.Headers.Add(HttpRequestHeader.Authorization, string.Concat("token ", githubToken));
             request.Accept = "application/vnd.github.v3.raw";
             request.UserAgent = "test app";
@@ -37,7 +36,6 @@ namespace autoTweeter
                     lastCommit = commits[0].commit.message;
                 }
             }
-
 
             if (string.IsNullOrWhiteSpace(lastCommit) || !lastCommit.Contains(".md"))
             {
@@ -59,7 +57,7 @@ namespace autoTweeter
                 Configuration["twitter_access_token"], 
                 Configuration["twitter_access_token_secret"]
             );
-
+            
             var result = service.SendTweet(new SendTweetOptions
             {
                 Status = status

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.ServiceModel.Syndication;
 using System.Xml;
@@ -20,19 +21,36 @@ namespace autoTweeter
         static void Main(string[] args)
         {
             string lastCommit = string.Empty;
-            using (var client = new HttpClient())
+
+            var githubToken = Configuration["access_token"];
+            var request = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/johnpierson/sixtysecondrevit/commits");
+            request.Headers.Add(HttpRequestHeader.Authorization, string.Concat("token ", githubToken));
+            request.Accept = "application/vnd.github.v3.raw";
+            request.UserAgent = "test app";
+            using (var response = request.GetResponse())
             {
-                client.DefaultRequestHeaders.Add("User-Agent",
-                    "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)");
-
-                using (var response = client.GetAsync("https://api.github.com/repos/johnpierson/sixtysecondrevit/commits").Result)
+                var encoding = System.Text.ASCIIEncoding.UTF8;
+                using (var reader = new System.IO.StreamReader(response.GetResponseStream(), encoding))
                 {
-                    var json = response.Content.ReadAsStringAsync().Result;
-
+                    var json = reader.ReadToEnd();
                     dynamic commits = JArray.Parse(json);
                     lastCommit = commits[0].commit.message;
                 }
             }
+
+            //using (var client = new HttpClient())
+            //{
+            //    client.DefaultRequestHeaders.Add("User-Agent",
+            //        "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)");
+
+            //    using (var response = client.GetAsync("https://api.github.com/repos/johnpierson/sixtysecondrevit/commits").Result)
+            //    {
+            //        var json = response.Content.ReadAsStringAsync().Result;
+
+            //        dynamic commits = JArray.Parse(json);
+            //        lastCommit = commits[0].commit.message;
+            //    }
+            //}
 
             
 

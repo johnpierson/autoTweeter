@@ -16,12 +16,6 @@ namespace autoTweeter
                 .AddEnvironmentVariables()
                 .Build();
 
-        private static readonly string[] Exclamations = new[]
-        {
-            "Check it out!",
-            "I wrote",
-            "ICYMI"
-        };
 
         static void Main(string[] args)
         {

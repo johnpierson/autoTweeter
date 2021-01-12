@@ -38,24 +38,17 @@ namespace autoTweeter
                 }
             }
 
-            //using (var client = new HttpClient())
-            //{
-            //    client.DefaultRequestHeaders.Add("User-Agent",
-            //        "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)");
 
-            //    using (var response = client.GetAsync("https://api.github.com/repos/johnpierson/sixtysecondrevit/commits").Result)
-            //    {
-            //        var json = response.Content.ReadAsStringAsync().Result;
+            if (string.IsNullOrWhiteSpace(lastCommit) || !lastCommit.Contains(".md"))
+            {
+                return;
+            }
 
-            //        dynamic commits = JArray.Parse(json);
-            //        lastCommit = commits[0].commit.message;
-            //    }
-            //}
-
-            
+            lastCommit = lastCommit.Replace("Create ", "");
+            lastCommit = lastCommit.Replace(".md ", "");
 
 
-            var status = $"new post: https://www.sixtysecondrevit.com/{lastCommit.Replace("Create ", "")}";
+            var status = $"new post: https://www.sixtysecondrevit.com/{lastCommit}";
 
             var service = new TwitterService(
                 Configuration["twitter_consumer_key"],
